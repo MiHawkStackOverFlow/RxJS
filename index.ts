@@ -18,7 +18,7 @@ let allBooksObservable$ = new Observable(subscriber => {
         subscriber.complete();
     }, 2000);
 
-    return () => console.log("Execution teardown code.");
+    // return () => console.log("Execution teardown code.");
 });
 
 allBooksObservable$.subscribe((book: any) => console.log(book.title));
@@ -84,6 +84,20 @@ books$.subscribe(
 );
 
 
+let currentTime$ = new Observable(subscriber => {
+   const timeString = new Date().toLocaleTimeString();
+   subscriber.next(timeString);
+   subscriber.complete();
+});
 
+currentTime$.subscribe(ct => console.log(`Observer1: ${ct}`));
+
+setTimeout(() => {
+    currentTime$.subscribe(ct => console.log(`Observer2: ${ct}`));
+}, 1000);
+
+setTimeout(() => {
+    currentTime$.subscribe(ct => console.log(`Observer3: ${ct}`));
+}, 2000);
 
 
