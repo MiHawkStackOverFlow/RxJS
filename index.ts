@@ -2,7 +2,7 @@ import { Observable, of, from, concat, fromEvent } from 'rxjs';
 import { allBooks, allReaders } from './data';
 import { ajax, AjaxResponse } from 'rxjs/ajax';
 
-/* #region  create observables */
+/* #region Create Observables */
 /** Create observable and subscribe. You can use Observable.create too instead of new Observable  */
 let allBooksObservable$ = new Observable(subscriber => {
 
@@ -65,4 +65,25 @@ fromEvent(button, 'click').subscribe(event => {
     });
 });
 /* #endregion */
+
+/* #region Subscribing to Observables with Observers*/
+
+let books$ = from(allBooks);
+
+// let bookObserver = {
+//     next: book => console.log(`Title: ${book.title}`),
+//     error: err => console.log(`Error: ${err}`),
+//     complete: () => console.log(`All done!`)      
+// }
+
+// All the next, err and complete are optional
+books$.subscribe(
+    book => console.log(`Title: ${book.title}`),
+    err => console.log(`Error: ${err}`),
+    () => console.log(`All done!`)
+);
+
+
+
+
 
