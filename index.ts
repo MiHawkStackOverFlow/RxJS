@@ -1,22 +1,23 @@
-import { Observable, of, from, concat, fromEvent } from 'rxjs'; 
+import { Observable, of, from, concat, fromEvent } from 'rxjs';
 import { allBooks, allReaders } from './data';
 import { ajax, AjaxResponse } from 'rxjs/ajax';
 
+/* #region  create observables */
 /** Create observable and subscribe. You can use Observable.create too instead of new Observable  */
 let allBooksObservable$ = new Observable(subscriber => {
 
-    if(document.title !== 'Learning RxJS') {
-        subscriber.error('Incorrect page title.'); 
+    if (document.title !== 'Learning RxJS') {
+        subscriber.error('Incorrect page title.');
     }
-    
-    for(let book of allBooks) {
-      subscriber.next(book);
+
+    for (let book of allBooks) {
+        subscriber.next(book);
     }
 
     setTimeout(() => {
-      subscriber.complete();
+        subscriber.complete();
     }, 2000);
- 
+
     return () => console.log("Execution teardown code.");
 });
 
@@ -42,7 +43,7 @@ fromEvent(button, 'click').subscribe(event => {
 
     let readersDiv = document.getElementById('readers');
 
-    for(let reader of allReaders) {
+    for (let reader of allReaders) {
         readersDiv.innerHTML += reader.name + '<br>';
     }
 });
@@ -58,8 +59,10 @@ fromEvent(button, 'click').subscribe(event => {
         let readers = ajaxResponse.response;
         let readersDiv = document.getElementById('readersAsync');
 
-        for(let reader of readers) {
+        for (let reader of readers) {
             readersDiv.innerHTML += reader.name + '<br>';
         }
     });
 });
+/* #endregion */
+
