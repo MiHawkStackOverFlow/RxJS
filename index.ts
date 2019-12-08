@@ -1,4 +1,4 @@
-import { Observable, of, from, concat, fromEvent } from 'rxjs';
+import { Observable, of, from, concat, fromEvent, interval } from 'rxjs';
 import { allBooks, allReaders } from './data';
 import { ajax, AjaxResponse } from 'rxjs/ajax';
 
@@ -90,6 +90,8 @@ let currentTime$ = new Observable(subscriber => {
    subscriber.complete();
 });
 
+// each observer get its own execution subsricption
+
 currentTime$.subscribe(ct => console.log(`Observer1: ${ct}`));
 
 setTimeout(() => {
@@ -101,3 +103,26 @@ setTimeout(() => {
 }, 2000);
 
 
+// cancelling observable subscriptions
+
+let timesDiv = document.getElementById('times');
+let button1 = document.getElementById('timerButton');
+
+let timer$ = interval(1000);
+
+let timerSubscription = timer$.subscribe(
+    value => timesDiv.innerHTML += `${ new Date().toLocaleTimeString() } (${value}) <br>`,
+    null,
+    () => console.log('All done!')
+);
+
+let timerConsoleSubscription = timer$.subscribe(
+    value => console.log(`${ new Date().toLocaleTimeString() } (${value})`),
+    null,
+    () => console.log('All done!')
+)
+
+// we can add, remove 2 subscriptions and unsubscribe them at once
+timerSubscription.add(timerConsoleSubscription); 
+
+fromEvent(button1, 'click').subscribe(event => timerSubscription.unsubscribe());
